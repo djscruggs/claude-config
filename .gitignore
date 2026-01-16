@@ -1,0 +1,34 @@
+# User data
+history.jsonl
+stats-cache.json
+
+# Session data
+session-env/
+shell-snapshots/
+
+# Debug/temp
+debug/
+file-history/
+paste-cache/
+
+# Project-specific state
+projects/
+todos/
+plans/
+
+# Plugins (reinstallable)
+plugins/
+
+# Analytics
+statsig/
+
+# Local overrides
+settings.local.json
+
+# System
+.DS_Store
+bash-command-log.txt
+
+# Cache (except changelog)
+cache/*
+!cache/changelog.md
