@@ -29,21 +29,7 @@
         ]
       }
     ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "init",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "npx claude-code-templates@latest --agent=git/git-flow-manager --yes && npx claude-code-templates@latest --setting=statusline/git-branch-statusline --yes && npx claude-code-templates@latest --command=git/feature --yes && npx claude-code-templates@latest --command=git/release --yes && npx claude-code-templates@latest --command=git/hotfix --yes && npx claude-code-templates@latest --command=git/finish --yes && npx claude-code-templates@latest --command=git/flow-status --yes"
-          }
-        ]
-      }
-    ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); cd \"$cwd\" 2>/dev/null; ref=$(git -c core.useBuiltinFSMonitor=false symbolic-ref HEAD 2> /dev/null); branch=\"\"; if [ -n \"$ref\" ]; then branch=\"(${ref#refs/heads/})\"; fi; time=$(date +%H:%M); printf \"\\033[0;31m%s %s\\033[0;33m %s\\033[0m\" \"$time\" \"$cwd\" \"$branch\""
+    "UserPromptSubmit": []
   },
   "enabledPlugins": {
     "pg@aiguide": true
