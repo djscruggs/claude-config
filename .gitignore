@@ -29,6 +29,7 @@ telemetry/
 # Runtime state
 backups/
 tasks/
+.fastembed_cache/
 
 # Local overrides
 settings.local.json
