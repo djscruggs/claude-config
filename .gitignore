@@ -22,6 +22,14 @@ plugins/
 # Analytics
 statsig/
 
+# Usage/telemetry data
+usage-data/
+telemetry/
+
+# Runtime state
+backups/
+tasks/
+
 # Local overrides
 settings.local.json
 
