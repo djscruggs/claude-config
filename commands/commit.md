@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Agent
+allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(npx tsc:*), Bash(pnpm:*), Bash(npm run:*), Bash(yarn:*), Agent
 description: Smart commit with triage, review agents, and generated commit message
 ---
 
@@ -41,29 +41,37 @@ Source files: Y
 Reason: [brief explanation]
 ```
 
-If **NONE**: skip to Step 6.
+If **NONE**: skip to Step 7.
 If **LIGHT** or **FULL**: continue to Step 3.
 
 ---
 
-## Step 3 — Simplify Pass
+## Step 3 — Quality Gates (if applicable)
 
-Dispatch the `code-simplicity-reviewer` agent with the diff from Step 1.
+Check if any `.ts` or `.tsx` files changed. If so, detect the package manager and run type-check and lint in parallel:
 
-Prompt the agent:
-> Review this git diff for unnecessary complexity, redundancy, and YAGNI violations. Report findings with file and line references. Do NOT edit any files — report only.
+```
+Detect (check in order):
+1. pnpm-lock.yaml present → use pnpm
+2. yarn.lock present      → use yarn
+3. package-lock.json      → use npm
 
-If the agent returns findings rated Medium or High:
-- Display findings clearly
-- Ask: "Simplify issues found. Fix before committing? (y/n)"
-- If yes: stop here and let the user fix, then re-run `/commit`
-- If no: continue
+Run simultaneously:
+- npx tsc --noEmit          (or pnpm/yarn tsc --noEmit)
+- <pkg manager> run lint    (if lint script exists in package.json)
+```
+
+If either fails: show errors, stop. Say "Fix type/lint errors, then re-run /commit."
+If no `.ts`/`.tsx` files changed, or no `package.json` found: skip this step.
 
 ---
 
-## Step 4 — Review Dispatch
+## Step 5 — Simplify + Review (Parallel)
 
-Dispatch agents in parallel based on triage level and file types.
+Dispatch all agents simultaneously using the diff from Step 1.
+
+**Always dispatch:**
+- `code-simplicity-reviewer` — prompt: "Review this git diff for unnecessary complexity, redundancy, and YAGNI violations. Report findings with file and line references. Do NOT edit any files — report only."
 
 **Always for LIGHT or FULL:**
 - If any `.ts`, `.tsx`, `.js`, or `.jsx` files changed → dispatch `kieran-typescript-reviewer`
@@ -78,21 +86,23 @@ Wait for all agents to complete.
 
 ---
 
-## Step 5 — Synthesis
+## Step 4 — Synthesis
 
 Collect all agent verdicts. Display a summary:
 
 ```
 Review Results:
-  kieran-typescript-reviewer: [PASS | WARN | FAIL]
+  code-simplicity-reviewer:   [PASS | WARN]
+  kieran-typescript-reviewer: [PASS | WARN | FAIL]   (if run)
   security-sentinel:          [PASS | WARN | FAIL]   (if run)
   pattern-recognition:        [PASS | WARN | FAIL]   (if run)
 ```
 
 Decision:
-- All PASS → proceed to Step 6
-- Any WARN → show warnings, ask "Proceed anyway? (y/n)"
-- Any FAIL → show findings, stop. Say "Fix the above issues, then re-run /commit."
+- `code-simplicity-reviewer` returned Medium or High findings → show findings, ask "Simplify issues found. Fix before committing? (y/n)". If yes: stop, let user fix, re-run `/commit`. If no: continue.
+- Any reviewer FAIL → show findings, stop. Say "Fix the above issues, then re-run /commit."
+- Any reviewer WARN → show warnings, ask "Proceed anyway? (y/n)"
+- All PASS → proceed to Step 7
 
 ---
 
