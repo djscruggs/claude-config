@@ -5,6 +5,7 @@ stats-cache.json
 # Session data
 session-env/
 shell-snapshots/
+sessions/
 
 # Debug/temp
 debug/
