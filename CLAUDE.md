@@ -103,6 +103,11 @@ Tip: run `blz --help` (and `blz --prompt` for agent-specific guidance).
 
 ## Skills
 
+> **Note:** Some skills in `skills/` are symlinks into `~/.agents/skills/`. If the symlink targets don't exist (e.g. on a new machine), reinstall with:
+> - `find-skills`: `npx skills add vercel-labs/skills@find-skills`
+> - `gh-fetch`: `npx skills add retlehs/gh-fetch`
+> - `thinking-partner`: `npx skills add https://github.com/mattnowdev/thinking-partner --skill thinking-partner`
+
 ### /onboard
 Run at the start of any session in an unfamiliar or resumed project. Explores structure, stack, git state, and recent work, then suggests relevant skills for that repo.
 
