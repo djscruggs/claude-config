@@ -42,3 +42,6 @@ bash-command-log.txt
 # Cache (except changelog)
 cache/*
 !cache/changelog.md
+
+# MCP auth cache
+mcp-needs-auth-cache.json
