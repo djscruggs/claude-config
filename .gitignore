@@ -39,9 +39,8 @@ settings.local.json
 .DS_Store
 bash-command-log.txt
 
-# Cache (except changelog)
+# Cache
 cache/*
-!cache/changelog.md
 
 # MCP auth cache
 mcp-needs-auth-cache.json
