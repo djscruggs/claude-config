@@ -13,6 +13,7 @@
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
+        "if": "Edit(*.ts)|Edit(*.tsx)|Edit(*.js)|Edit(*.jsx)|Edit(*.json)|Edit(*.css)|Edit(*.md)|Write(*.ts)|Write(*.tsx)|Write(*.js)|Write(*.jsx)|Write(*.json)|Write(*.css)|Write(*.md)|MultiEdit(*.ts)|MultiEdit(*.tsx)|MultiEdit(*.js)|MultiEdit(*.jsx)|MultiEdit(*.json)|MultiEdit(*.css)|MultiEdit(*.md)",
         "hooks": [
           {
             "type": "command",
@@ -21,7 +22,17 @@
         ]
       }
     ],
-"UserPromptSubmit": []
+    "CwdChanged": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if command -v direnv &>/dev/null; then direnv export bash 2>/dev/null | grep -v '^#' | while IFS= read -r line; do eval \"$line\"; done; fi"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": []
   },
   "statusLine": {
     "type": "command",
@@ -33,6 +44,21 @@
     "code-simplifier@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
   },
+  "permissions": {
+    "allow": [
+      "Bash(claude --version*)",
+      "Bash(curl -s https://api.github.com/repos/anthropics/claude-code/releases*)",
+      "Bash(printf '%s' * > ~/.claude/whats-new-last-version.txt)"
+    ]
+  },
   "alwaysThinkingEnabled": false,
-  "mcpServers": {}
+  "mcpServers": {},
+  "extraKnownMarketplaces": {
+    "whats-new-marketplace": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/bradfeld/whats-new-plugin.git"
+      }
+    }
+  }
 }
